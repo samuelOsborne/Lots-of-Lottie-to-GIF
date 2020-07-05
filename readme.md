@@ -1,41 +1,80 @@
-# puppeteer-lottie-cli
+# Lots-of-Lottie-to-GIF
 
-> CLI for rendering [Lottie](http://airbnb.io/lottie) animations via [Puppeteer](https://github.com/GoogleChrome/puppeteer) to **image**, **GIF** or **MP4**.
+[Forked from puppeteer-lottie-cli](https://github.com/transitive-bullshit/puppeteer-lottie-cli)
 
-[![NPM](https://img.shields.io/npm/v/puppeteer-lottie-cli.svg)](https://www.npmjs.com/package/puppeteer-lottie-cli) [![Build Status](https://travis-ci.com/transitive-bullshit/puppeteer-lottie-cli.svg?branch=master)](https://travis-ci.com/transitive-bullshit/puppeteer-lottie-cli) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+> CLI for rendering **lots** of [Lottie](http://airbnb.io/lottie) animations via [Puppeteer](https://github.com/GoogleChrome/puppeteer) to **GIF**.
 
 <p align="center">
   <img width="100%" alt="Logo" src="https://raw.githubusercontent.com/transitive-bullshit/puppeteer-lottie/master/media/logo.gif">
 </p>
 
-This CLI is also available as a [library](https://github.com/transitive-bullshit/puppeteer-lottie).
-
 ## Install
 
 ```bash
-npm install -g puppeteer-lottie-cli
+npm install
 ```
 
 If you want to generate **GIFs**, you must also install [gifski](https://gif.ski/). On macOS, you can run:
 
 ```bash
-brew install gifski
+npm install -g gifski
 ```
 
-If you want to generate **MP4s**, you must also install [ffmpeg](https://ffmpeg.org/). On macOS, you can run:
+## File structure
+
+This project was intended only to work with how I layout my animations, it was not
+meant to be a generic solution, so either stick to the same file structure as more or
+modify the code to work on yours.
 
 ```bash
-brew install ffmpeg
+.
+├── Dog
+    ├── fill
+        ├── dog-fill.json
+    ├── outline
+        ├── dog-outline.json
+├── Cat
+    ├── fill
+        ├── cat-fill.json
+    ├── outline
+        ├── cat-outline.json
 ```
+
+Will become
+
+```bash
+.
+├── Dog
+    ├── fill
+        ├── dog-fill.json
+    ├── outline
+        ├── dog-outline.json
+    ├── gif
+        ├── fill
+            ├── dog-fill.gif
+        ├── outline
+            ├── dog-outline.gif
+├── Cat
+    ├── fill
+        ├── cat-fill.json
+    ├── outline
+        ├── cat-outline.json
+    ├── gif
+        ├── fill
+            ├── cat-fill.gif
+        ├── outline
+            ├── cat-outline.gif
+```
+
+
 
 ## Usage
 
 ```bash
-Usage: puppeteer-lottie [options]
+Usage: node index.js -i [options]
 
 Options:
-  -i, --input <path>     relative path to the JSON file containing animation data
-  -o, --output <path>    relative path to store output media (image, image pattern, gif, or mp4) (default: "out.png")
+  -i, --input <path>     relative path to the directory containing the file structure shown above
   -w, --width <number>   optional output width
   -h, --height <number>  optional output height
   -b, --background <css-color-value>
@@ -44,29 +83,19 @@ Options:
   -V, --version          output the version number
   -h, --help             output usage information
 
-Output must one of the following:
-  - An image to capture the first frame only (png or jpg)
-  - an image pattern (eg. sprintf format 'frame-%d.png' or 'frame-%012d.jpg')
-  - an mp4 video file (requires FFmpeg to be installed)
-  - a GIF file (requires Gifski to be installed)
 ```
 
 ```bash
 Examples:
-  $ puppeteer-lottie -i fixtures/bodymovin.json -o out.mp4
-  $ puppeteer-lottie -i fixtures/bodymovin.json -o out.gif --width 640
-  $ puppeteer-lottie -i fixtures/bodymovin.json -o 'frame-%d.png' --width 1024 --height 1024
+  $ node index.js -i ./animations
+  $ node index.js -i ./animations -h 250 -w 250 -b '#ffffff' -q true
 ```
 
-#### Output Size
+## File output
 
-If you don't pass `width` or `height`, the animation's intrinsic size will be used, and if that doesn't exist it will use 640x480.
+All GIFs will be output with a resolution of 500x500, a white background, 50 fps and quality 100 by default.
+The GIFs can be found in the gif folder, as described above
 
-If you pass `width` or `height`, the other dimension will be inferred by maintaining the original animation's aspect ratio.
-
-If both `width` and `height` are passed, the output will have those dimensions, but there will be extra whitespace (or transparency if rendering PNGs) due to `lottie-web`'s default `rendererSettings.preserveAspectRatio` of `xMidyMid meet` ([docs](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio) and [demo](https://codepen.io/giodif/pen/VYpaeo)).
-
-For `mp4` outputs, the height may be different by a pixel due to the `x264` encoder requiring even heights.
 
 ## Compatibility
 
