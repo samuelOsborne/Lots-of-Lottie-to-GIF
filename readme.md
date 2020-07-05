@@ -115,4 +115,4 @@ Also see Lottie's full list of [supported features](https://airbnb.io/lottie/#/s
 
 ## License
 
-MIT © [Travis Fischer](https://transitivebullsh.it)
+MIT © [Samuel Osborne](https://svgenius.co)
